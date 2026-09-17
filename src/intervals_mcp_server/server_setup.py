@@ -52,8 +52,11 @@ def start_server(mcp_instance: FastMCP, transport: TransportAliases) -> None:
         mcp_instance (FastMCP): The FastMCP server instance to start.
         transport (TransportAliases): The transport type to use.
     """
-    host = mcp_instance.settings.host
-    port = mcp_instance.settings.port
+    host = os.getenv("FASTMCP_HOST", "0.0.0.0")
+    port = int(os.getenv("PORT", os.getenv("FASTMCP_PORT", "8000")))
+
+    mcp_instance.settings.host = host
+    mcp_instance.settings.port = port
 
     if transport == TransportAliases.STDIO:
         logger.info("Starting MCP server with stdio transport.")
